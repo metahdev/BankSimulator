@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D15BAB7C24E6340700A6EDE4 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15BAB7B24E6340700A6EDE4 /* Content.swift */; };
+		D15BAB7E24E6558300A6EDE4 /* HowToViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15BAB7D24E6558300A6EDE4 /* HowToViewController.swift */; };
+		D15BAB8124E6560100A6EDE4 /* DevelopersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15BAB8024E6560100A6EDE4 /* DevelopersViewController.swift */; };
 		D17DE0F524E5C2AC005F1A6C /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17DE0F424E5C2AC005F1A6C /* SettingsViewController.swift */; };
+		D1EC16E524E671F500DE301A /* CollectionViewCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EC16E424E671F500DE301A /* CollectionViewCells.swift */; };
 		D1F2081924E56035004962CF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F2081824E56035004962CF /* AppDelegate.swift */; };
 		D1F2081B24E56035004962CF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F2081A24E56035004962CF /* SceneDelegate.swift */; };
 		D1F2081D24E56035004962CF /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F2081C24E56035004962CF /* HomeViewController.swift */; };
@@ -17,7 +21,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D15BAB7B24E6340700A6EDE4 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
+		D15BAB7D24E6558300A6EDE4 /* HowToViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToViewController.swift; sourceTree = "<group>"; };
+		D15BAB8024E6560100A6EDE4 /* DevelopersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopersViewController.swift; sourceTree = "<group>"; };
 		D17DE0F424E5C2AC005F1A6C /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		D1EC16E424E671F500DE301A /* CollectionViewCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCells.swift; sourceTree = "<group>"; };
 		D1F2081524E56035004962CF /* BankSimulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BankSimulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1F2081824E56035004962CF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D1F2081A24E56035004962CF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -39,6 +47,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D15BAB7F24E655ED00A6EDE4 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D15BAB7D24E6558300A6EDE4 /* HowToViewController.swift */,
+				D1F2081C24E56035004962CF /* HomeViewController.swift */,
+				D17DE0F424E5C2AC005F1A6C /* SettingsViewController.swift */,
+				D15BAB8024E6560100A6EDE4 /* DevelopersViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		D1EC16E224E6703400DE301A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D1F2081824E56035004962CF /* AppDelegate.swift */,
+				D1F2081A24E56035004962CF /* SceneDelegate.swift */,
+				D1EC16E424E671F500DE301A /* CollectionViewCells.swift */,
+				D15BAB7B24E6340700A6EDE4 /* Content.swift */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D1EC16E324E6704600DE301A /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				D1F2081E24E56035004962CF /* Main.storyboard */,
+				D1F2082324E56037004962CF /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
 		D1F2080C24E56035004962CF = {
 			isa = PBXGroup;
 			children = (
@@ -58,13 +97,10 @@
 		D1F2081724E56035004962CF /* BankSimulator */ = {
 			isa = PBXGroup;
 			children = (
-				D1F2081824E56035004962CF /* AppDelegate.swift */,
-				D1F2081A24E56035004962CF /* SceneDelegate.swift */,
-				D1F2081C24E56035004962CF /* HomeViewController.swift */,
-				D17DE0F424E5C2AC005F1A6C /* SettingsViewController.swift */,
-				D1F2081E24E56035004962CF /* Main.storyboard */,
+				D15BAB7F24E655ED00A6EDE4 /* ViewControllers */,
+				D1EC16E324E6704600DE301A /* Storyboards */,
+				D1EC16E224E6703400DE301A /* Supporting Files */,
 				D1F2082124E56037004962CF /* Assets.xcassets */,
-				D1F2082324E56037004962CF /* LaunchScreen.storyboard */,
 				D1F2082624E56037004962CF /* Info.plist */,
 			);
 			path = BankSimulator;
@@ -141,9 +177,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D15BAB7E24E6558300A6EDE4 /* HowToViewController.swift in Sources */,
 				D1F2081D24E56035004962CF /* HomeViewController.swift in Sources */,
+				D15BAB8124E6560100A6EDE4 /* DevelopersViewController.swift in Sources */,
 				D1F2081924E56035004962CF /* AppDelegate.swift in Sources */,
 				D1F2081B24E56035004962CF /* SceneDelegate.swift in Sources */,
+				D15BAB7C24E6340700A6EDE4 /* Content.swift in Sources */,
+				D1EC16E524E671F500DE301A /* CollectionViewCells.swift in Sources */,
 				D17DE0F524E5C2AC005F1A6C /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
