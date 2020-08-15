@@ -25,15 +25,19 @@ class DevelopersViewController: UIViewController {
 // MARK:- Extensions
 extension DevelopersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return Content.devs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "reuseID", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "reuseID", for: indexPath) as! DevCVCell
+        cell.imageName = Content.devs[indexPath.row]
+        cell.title = Content.devsDescriptions[indexPath.row]
         return cell
     }
 }
 
-extension DevelopersViewController: UICollectionViewDelegate {
-    
+extension DevelopersViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height * 0.25)
+    }
 }

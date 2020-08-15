@@ -10,18 +10,22 @@ import UIKit
 
 class HomeViewController: UIViewController {
     // MARK:- Properties
-    @IBOutlet weak var iconIV: UIImageView!
-    @IBOutlet weak var detailsTV: UITableView!
-    @IBOutlet weak var userPointsLbl: UILabel!
-    @IBOutlet weak var AIpointsLbl: UILabel!
+    @IBOutlet private weak var iconIV: UIImageView!
+    @IBOutlet private weak var detailsTV: UITableView!
+    @IBOutlet private weak var userPointsLbl: UILabel!
+    @IBOutlet private weak var AIpointsLbl: UILabel!
+    @IBOutlet private weak var timerLbl: UILabel!
     
-    var currentModel: Model!
-    var currentIndex = 0
-    var won = false
-    var lastOne = false
+    private var currentModel: Model!
+    private var currentIndex = 0
+    private var won = false
+    private var lastOne = false
     
-    var userPoints = 0
-    var AIpoints = 0
+    private var userPoints = 0
+    private var AIpoints = 0
+    
+    private var timer = Timer()
+    private var counter = 0
     
     
     // MARK:- View Lifecycle
@@ -29,6 +33,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         setProperties()
         Content.recalculateAIAnswers()
+        setContent()
     }
     
     private func setProperties() {
@@ -37,49 +42,75 @@ class HomeViewController: UIViewController {
         self.detailsTV.tableFooterView = UIView()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        updateModel()
-    }
-    
-    private func updateModel() {
+    private func setContent() {
         currentModel = Content.models[currentIndex]
         let name = Content.getImage(for: currentModel)
         
         iconIV.image = UIImage(named: name)
         detailsTV.reloadData()
-        
+    }
+
+    private func updateModel() {
         currentIndex += 1
-        lastOne = (currentIndex == Content.models.count)
+        lastOne = (currentIndex + 1 == Content.models.count)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        runTimer()
+    }
+    
+    private func runTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(secondPassed), userInfo: nil, repeats: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        timer.invalidate()
     }
     
     
     // MARK:- Actions
-    @IBAction func decline(_ sender: Any) {
-        guard !lastOne else {
-            restartTheGame()
-            return
+    @objc
+    private func secondPassed() {
+        counter += 1
+        timerLbl.text = "Remaining time: \(60 - counter)"
+        if 60 - counter == 0 {
+            timer.invalidate()
+            counter = 0
+            showAlert("Game Over ", "Timer exceeded. You lost.", btnTitle: "Try again!", handler: {
+                self.nullifyData()
+                self.runTimer()
+            })
         }
-        won = !Content.modelsAnswers[currentIndex]
+    }
+    
+    @IBAction func decline(_ sender: Any) {
+        won = Content.modelsAnswers[currentIndex] == "rejected"
+        
+        checkValues()
+        updateScores()
         showRoundAlert(accepted: false)
     }
     
     @IBAction func accept(_ sender: Any) {
-        guard !lastOne else {
-            restartTheGame()
-            return
-        }
-        won = Content.modelsAnswers[currentIndex]
+        won = Content.modelsAnswers[currentIndex] == "accepted"
+
+        checkValues()
+        updateScores()
         showRoundAlert(accepted: true)
     }
     
-    private func updateScores() {
+    private func checkValues() {
         if won {
             userPoints += 1
         }
-        if Content.modelsAIAnswers == Content.modelsAnswers {
+        if Content.modelsAIAnswers[currentIndex] == Content.modelsAnswers[currentIndex] {
             AIpoints += 1
         }
+    }
+    
+    private func updateScores() {
         userPointsLbl.text = "Your score: \(userPoints)"
         AIpointsLbl.text = "AI score: \(AIpoints)"
     }
@@ -90,15 +121,26 @@ class HomeViewController: UIViewController {
         
         let message = "AI answer: \(AIanswer)\nActual answer: \(Content.modelsAnswers[currentIndex])"
         
+        #warning("alert might end when another alert is on")
         showAlert(title, message, btnTitle: "OK", handler: {
             UIView.animate(withDuration: 0.3, animations: {
-                accepted ? self.moveRight() : self.moveLeft()
+                if !self.lastOne {
+                    accepted ? self.moveRight() : self.moveLeft()
+                }
             }, completion: { _ in
-                accepted ? self.moveLeft() : self.moveRight()
-                self.updateModel()
-                self.updateScores()
+                self.roundCompletion(accepted)
             })
         })
+    }
+    
+    private func roundCompletion(_ accepted: Bool) {
+        guard !lastOne else {
+            self.restartTheGame()
+            return
+        }
+        accepted ? self.moveLeft() : self.moveRight()
+        self.updateModel()
+        self.setContent()
     }
     
     private func showAlert(_ title: String, _ message: String, btnTitle: String, handler: @escaping () -> Void) {
@@ -119,16 +161,32 @@ class HomeViewController: UIViewController {
     }
     
     private func restartTheGame() {
-        currentIndex = 0
+        var message = "You won! 🧠"
+        if userPoints == AIpoints {
+            message = "It's a draw 🗿"
+        } else if userPoints < AIpoints {
+            message = "You lost 💀"
+        }
+        message += " Should we try one more time?"
+        
+        timer.invalidate()
+        counter = 0
+        nullifyData()
+        
+        showAlert("Game Over 👾", message, btnTitle: "Let's go!", handler: {
+            self.updateModel()
+            self.setContent()
+            self.updateScores()
+        })
+    }
+    
+    private func nullifyData() {
+        currentIndex = -1
         won = false
         lastOne = false
-        
-        let title = userPoints > AIpoints ? "You won this game! 🧠" : "You lost this game 🗿"
-        let message = userPoints > AIpoints ? "Wanna play more?" : "Should we try one more time?"
-        
-        showAlert(title, message, btnTitle: "Let's go!", handler: {
-            self.updateModel()
-        })
+               
+        userPoints = 0
+        AIpoints = 0
     }
 }
 
@@ -152,7 +210,7 @@ extension HomeViewController: UITableViewDataSource {
         case 2:
             text = "Gender: \(currentModel.gender)"
         case 4:
-            text = "Salary/month: \(currentModel.salary)"
+            text = "Salary/month: \(currentModel.salary)$"
         case 3:
             text = "Working place: \(currentModel.workingPlace)"
         case 5:
