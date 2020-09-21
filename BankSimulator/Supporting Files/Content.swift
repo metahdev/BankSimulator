@@ -8,14 +8,6 @@
 
 import Foundation
 
-#warning("TODO")
-/* 
- After:
- Finish the HowToVC
- Create images of 'How to play'
- Finish the AI source code
- */
-
 class Model {
     var name: String
     var age: Int
