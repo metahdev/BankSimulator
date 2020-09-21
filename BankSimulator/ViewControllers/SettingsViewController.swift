@@ -25,25 +25,20 @@ class SettingsViewController: UIViewController {
 // MARK:- Extensions
 extension SettingsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "reuseID")
-        switch indexPath.row {
-        case 0:
-            cell.textLabel!.text = "How to Play?"
-        case 1:
-            cell.textLabel!.text = "Meet the developers"
-        default:
-            cell.textLabel!.text = "FAQ"
-        }
+        cell.textLabel!.text = "Meet the developers"
         return cell
     }
 }
 
 extension SettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)
+        cell?.isSelected = !cell!.isSelected
         performSegue(withIdentifier: "DevSegue", sender: nil)
     }
 }

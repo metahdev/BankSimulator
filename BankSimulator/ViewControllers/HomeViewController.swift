@@ -44,9 +44,7 @@ class HomeViewController: UIViewController {
     
     private func setContent() {
         currentModel = Content.models[currentIndex]
-        let name = Content.getImage(for: currentModel)
-        
-        iconIV.image = UIImage(named: name)
+        iconIV.image = UIImage(named: currentModel.name)
         detailsTV.reloadData()
     }
 
@@ -80,6 +78,8 @@ class HomeViewController: UIViewController {
             counter = 0
             showAlert("Game Over ", "Timer exceeded. You lost.", btnTitle: "Try again!", handler: {
                 self.nullifyData()
+                self.updateModel()
+                self.setContent()
                 self.runTimer()
             })
         }
@@ -88,6 +88,7 @@ class HomeViewController: UIViewController {
     @IBAction func decline(_ sender: Any) {
         won = Content.modelsAnswers[currentIndex] == "rejected"
         
+        timer.invalidate()
         checkValues()
         updateScores()
         showRoundAlert(accepted: false)
@@ -96,6 +97,7 @@ class HomeViewController: UIViewController {
     @IBAction func accept(_ sender: Any) {
         won = Content.modelsAnswers[currentIndex] == "accepted"
 
+        timer.invalidate()
         checkValues()
         updateScores()
         showRoundAlert(accepted: true)
@@ -121,13 +123,13 @@ class HomeViewController: UIViewController {
         
         let message = "AI answer: \(AIanswer)\nActual answer: \(Content.modelsAnswers[currentIndex])"
         
-        #warning("alert might end when another alert is on")
         showAlert(title, message, btnTitle: "OK", handler: {
             UIView.animate(withDuration: 0.3, animations: {
                 if !self.lastOne {
                     accepted ? self.moveRight() : self.moveLeft()
                 }
             }, completion: { _ in
+                self.runTimer()
                 self.roundCompletion(accepted)
             })
         })
@@ -177,6 +179,7 @@ class HomeViewController: UIViewController {
             self.updateModel()
             self.setContent()
             self.updateScores()
+            self.runTimer()
         })
     }
     
